@@ -23,7 +23,28 @@ const itemsSchema = {
 
 const Item = mongoose.model("Item", itemsSchema)
 
+const item1 = new Item({
+  name: "30 minute Yoga"
+});
 
+const item2 = new Item({
+  name: "Make Breakfast and eat"
+});
+
+const item3 = new Item({
+  name: "Clean Kitchen"
+});
+
+const defaultItems = [item1, item2, item3];
+
+Item.insertMany(defaultItems, function(err){
+  if(err){
+    console.log(err)
+  }
+  else{
+    console.log("Successfully updated Collection")
+  }
+})
 
 app.get("/", function(req, res) {
 
