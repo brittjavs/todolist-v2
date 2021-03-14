@@ -2,23 +2,33 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+require('dotenv').config()
+
+const mongoose = require('mongoose');
+
+const uri = process.env.DB_URI
 const date = require(__dirname + "/date.js");
 
 const app = express();
 
 app.set('view engine', 'ejs');
-
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-const items = ["Buy Food", "Cook Food", "Eat Food"];
-const workItems = [];
+mongoose.connect(uri, {useNewUrlParser: true})
+
+const itemsSchema = {
+  name: String
+}
+
+const Item = mongoose.model("Item", itemsSchema)
+
+
 
 app.get("/", function(req, res) {
 
-const day = date.getDate();
 
-  res.render("list", {listTitle: day, newListItems: items});
+  res.render("list", {listTitle: "Today", newListItems: items});
 
 });
 
