@@ -7,6 +7,7 @@ require('dotenv').config()
 const mongoose = require('mongoose');
 
 const uri = process.env.DB_URI
+
 const date = require(__dirname + "/date.js");
 
 const app = express();
@@ -15,6 +16,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
+//connects to mongodb atlas cluster & database
 mongoose.connect(uri, {useNewUrlParser: true})
 
 const itemsSchema = {
@@ -37,19 +39,21 @@ const item3 = new Item({
 
 const defaultItems = [item1, item2, item3];
 
-Item.insertMany(defaultItems, function(err){
-  if(err){
-    console.log(err)
-  }
-  else{
-    console.log("Successfully updated Collection")
-  }
-})
+// Item.insertMany(defaultItems, function(err){
+//   if(err){
+//     console.log(err)
+//   }
+//   else{
+//     console.log("Successfully updated Collection")
+//   }
+// })
+
+
 
 app.get("/", function(req, res) {
-
-
-  res.render("list", {listTitle: "Today", newListItems: items});
+  Item.find({}, function(req, foundItems){
+    res.render("list", {listTitle: "Today", newListItems: foundItems});
+  })
 
 });
 
